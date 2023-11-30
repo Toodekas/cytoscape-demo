@@ -1,28 +1,44 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <cytoscape-box :elements="elements"></cytoscape-box>
+    <button @click="showModal = true">Add Box</button>
+    <add-box-modal v-if="showModal" @add-box="addBox"></add-box-modal>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CytoscapeBox from "./components/CytoscapeBox.vue";
+import AddBoxModal from "./components/AddBoxModal.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    CytoscapeBox,
+    AddBoxModal,
+  },
+  data() {
+    return {
+      showModal: false,
+      elements: [],
+    };
+  },
+  methods: {
+    addBox(box) {
+      this.showModal = false;
+      const colorMap = {
+        name: "#f8cecc",
+        account: "#dae8fc",
+        financials: "#d5e8d4",
+        address: "#f8e7e7",
+      };
+      const newBox = {
+        group: "nodes",
+        data: { id: box.name, name: box.name, color: colorMap[box.type] },
+        position: { x: 400, y: 300 },
+      };
+      console.log(newBox);
+      this.elements.push(newBox);
+    },
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
